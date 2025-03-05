@@ -20,8 +20,8 @@ redis-server
 # auth check features
 User signups to the account with username,email, password
 
-## API: /signup
-## Request body: 
+### API: /signup
+### Request body: 
 {
     "userName": "",
     "password": "",

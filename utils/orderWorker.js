@@ -69,7 +69,6 @@ async function pollSQS() {
   } catch (error) {
     console.error("❌ Error polling SQS:", error)
   }
-
   // **Ensure polling continues even if no messages are found**
   setImmediate(pollSQS)  // Runs the function again immediately
 }

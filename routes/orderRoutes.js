@@ -83,7 +83,7 @@ orderRouter.post('/orders', authMiddleware, async(req, res) => {
     }
 })
 
-orderRouter.post('/getOrder', async(req, res) => {
+orderRouter.post('/getOrder', authMiddleware, async(req, res) => {
   try {
     const {id} = req.body
     const cacheKey = `order:${id}` 

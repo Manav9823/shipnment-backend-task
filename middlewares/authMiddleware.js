@@ -14,7 +14,7 @@ const authMiddleware = async(req, res, next) => {
     }
     try{
         console.log('inside verify', process.env.JWT_SIGN_STRATEGY)
-        const {id} = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN)
+        const {id} = jwt.verify(accessToken, process.env.JWT_SIGN_STRATEGY)
         console.log('manav avava', id)
         const user = await User.findOne({_id: id})
         console.log('user here is',user)
@@ -33,12 +33,10 @@ const authMiddleware = async(req, res, next) => {
             const user = await User.findOne({_id: id})
             console.log('user', user)
             const accessToken = jwt.sign({ id: user._id }, process.env.JWT_REFRESH_TOKEN, { expiresIn: '1h' })
-            console.log('in refresh token')
-            console.log(accessToken)
-            res
-              .cookie('refreshToken', refreshToken, { httpOnly: true, sameSite: 'strict' })
-              .header('Authorization', accessToken)
-              .send(decoded.user)
+            console.log('access token here is', accessToken)
+            res.cookie('refreshToken', refreshToken, { httpOnly: true, sameSite: 'strict' })
+            res.header('Authorization', `Bearer ${accessToken}`)
+            res.status(400).json({message: 'Invalid Token, please use a valid token'})
           } catch (error) {
             return res.status(400).send('Invalid Token.')
           }
