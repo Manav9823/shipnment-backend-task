@@ -51,16 +51,16 @@ authRouter.post('/login', async(req, res) => {
 })
 
 authRouter.post('/refresh', async(req, res) => {
+    console.log('in refresh', req.cookies)
     const refreshToken = req.cookies['refreshToken']
     if (!refreshToken) {
       return res.status(401).send('Access Denied. No refresh token provided.')
     }
-  
     try {
-      const {id} = jwt.verify(refreshToken, secretKey)
+    console.log(process.env.JWT_REFRESH_TOKEN)
+      const {id} = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN)
       const user = await User.findOne({_id: id})
       const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SIGN_STRATEGY, { expiresIn: '1h' })
-  
       res.header('Authorization', `Bearer ${accessToken}`)
       res.status(200).json({message: 'Added new access token'})
     } catch (error) {
